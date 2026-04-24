@@ -32,11 +32,11 @@ interface PianoSessionDao {
 
     // Get all fields of a session based on its ID (primary key)
     @Query("SELECT * from practice_sessions WHERE id = :id")
-    suspend fun getSession(id: Int): Flow<PianoSession>
+    fun getSession(id: Int): Flow<PianoSession>
 
     // Get all sessions in descending order by date
     @Query("SELECT * from practice_sessions ORDER BY date DESC")
-    suspend fun getAllSessions(): Flow<List<PianoSession>>
+    fun getAllSessions(): Flow<List<PianoSession>>
 
 }
 

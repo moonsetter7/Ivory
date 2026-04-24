@@ -17,8 +17,8 @@ data class PianoSession(
     @PrimaryKey(autoGenerate = true) val id: Int = 0, // auto-increment
     //mark non-null to prevent app from accidentally saving a corrupted session
     @NonNull val date: String,
-    @NonNull val timestamp: ULong,
-    @NonNull val durationMillis: ULong,
+    @NonNull val timestamp: Long,
+    @NonNull val durationMillis: Long,
     val pieceName: String,
     val composer: String,
     val bpm: String,
