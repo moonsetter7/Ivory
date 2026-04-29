@@ -1,18 +1,44 @@
 <resources>
-    <string name="app_name">IvoryPiano</string>
-    <string name="session_entry_title">Log Practice Session</string>
-    <string name="session_details_title">Session Details</string>
-    <string name="piece_name">Piece Name</string>
+    <string name="app_name">Ivory</string>
+    <string name="session_entry_title">New Practice Entry</string>
+    <string name="session_details_title">Composition Log</string>
+    <string name="piece_name">Title of the Piece</string>
     <string name="composer">Composer</string>
-    <string name="bpm">BPM</string>
-    <string name="measures">Measures</string>
+    <string name="bpm">Tempo</string>
+    <string name="bpm_format">%1$s BPM</string>
+    <string name="measures">Structure</string>
+    <string name="measures_format">%1$s Measures</string>
     <string name="duration">Duration</string>
     <string name="date">Date</string>
-    <string name="timestamp">Timestamp</string>
-    <string name="delete">Delete</string>
-    <string name="save">Save</string>
-    <string name="no_sessions">No practice sessions yet.</string>
-    <string name="delete_question">Are you sure you want to delete this session?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+    <string name="timestamp">Logged at</string>
+    <string name="delete">Delete Entry</string>
+    <string name="save">Save to Diary</string>
+    <string name="no_sessions">Your diary is empty. Start practicing to log your first piece.</string>
+    <string name="delete_question">Are you sure you want to remove this practice log from your diary?</string>
+    <string name="yes">Delete</string>
+    <string name="no">Cancel</string>
+    <string name="untitled_composition">Untitled Composition</string>
+    <string name="by_composer">by %1$s</string>
+    <string name="unknown_composer">Unknown Composer</string>
+    <string name="duration_h_m_s">%1$dh %2$02dm %3$02ds</string>
+    <string name="duration_m_s">%1$02dm %2$02ds</string>
+    <string name="empty_value">—</string>
+
+    <!-- Authentication Strings -->
+    <string name="auth_welcome">Welcome to Ivory</string>
+    <string name="login_title">Sign In</string>
+    <string name="login_description">Enter your details to continue your musical journey</string>
+    <string name="register_title">Join Ivory</string>
+    <string name="register_description">Create an account to start tracking your piano sessions</string>
+    <string name="username_label">Username</string>
+    <string name="email_label">Email Address</string>
+    <string name="login_action">Enter</string>
+    <string name="register_action">Begin Journey</string>
+    <string name="no_account_prompt">Don\'t have an account?</string>
+    <string name="register_link">Start your journey here</string>
+    <string name="already_user_prompt">Already a user?</string>
+    <string name="login_link">Sign in here</string>
+
+    <string name="invalid_username">Please choose a name for your artistic identity.</string>
+    <string name="invalid_email">A valid email address is required for your diary.</string>
 </resources>

@@ -8,24 +8,26 @@ import android.content.Context
 interface AppContainer {
     val sessionsRepository: SessionsRepository
     val usersRepository: UsersRepository
+    val userSessionRepository: UserSessionRepository
 }
 
 /**
- * AppContainer implementation that provides instance of OfflineSessionsRepository
- * ...and OfflineUsersRepository
+ * AppContainer implementation that provides instances of repositories
  */
 class AppDataContainer(private val context: Context) : AppContainer {
-    /**
-     * Implementation for [SessionsRepository]
-     */
+    
     override val sessionsRepository: SessionsRepository by lazy {
         OfflineSessionsRepository(SessionDatabase.getDatabase(context).sessionDao())
     }
 
-    /**
-     * Implementation for [UsersRepository]
-     */
     override val usersRepository: UsersRepository by lazy {
         OfflineUsersRepository(SessionDatabase.getDatabase(context).userDao())
+    }
+
+    /**
+     * Hoisted app-level state for the active user session.
+     */
+    override val userSessionRepository: UserSessionRepository by lazy {
+        InMemoryUserSessionRepository()
     }
 }

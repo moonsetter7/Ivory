@@ -1,26 +1,12 @@
 package com.example.ivorypiano.ui.session
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,8 +14,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,7 +43,7 @@ fun SessionDetailsScreen(
     Scaffold(
         topBar = {
             IvoryPianoTopAppBar(
-                title = stringResource(SessionDetailsDestination.titleRes),
+                title = stringResource(R.string.session_details_title),
                 canNavigateBack = true,
                 navigateUp = navigateBack
             )
@@ -64,7 +52,9 @@ fun SessionDetailsScreen(
             var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
             FloatingActionButton(
                 onClick = { deleteConfirmationRequired = true },
-                shape = MaterialTheme.shapes.medium,
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                shape = MaterialTheme.shapes.extraLarge,
                 modifier = Modifier.padding(20.dp)
             ) {
                 Icon(
@@ -92,6 +82,7 @@ fun SessionDetailsScreen(
             modifier = modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
+                .fillMaxSize()
         )
     }
 }
@@ -102,63 +93,93 @@ private fun SessionDetailsBody(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = modifier.padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        // Header Section
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = if (sessionUiState.sessionDetails.pieceName.isNullOrBlank()) {
+                    stringResource(R.string.untitled_composition)
+                } else {
+                    sessionUiState.sessionDetails.pieceName
+                },
+                style = MaterialTheme.typography.displaySmall,
+                color = MaterialTheme.colorScheme.primary
             )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                SessionDetailsRow(
-                    labelResID = R.string.piece_name,
-                    sessionDetail = if (sessionUiState.sessionDetails.pieceName.isNullOrBlank()) "No Piece" else sessionUiState.sessionDetails.pieceName,
-                )
-                SessionDetailsRow(
-                    labelResID = R.string.composer,
-                    sessionDetail = if (sessionUiState.sessionDetails.composer.isNullOrBlank()) "N/A" else sessionUiState.sessionDetails.composer,
-                )
-                SessionDetailsRow(
-                    labelResID = R.string.bpm,
-                    sessionDetail = if (sessionUiState.sessionDetails.bpm.isNullOrBlank()) "N/A" else sessionUiState.sessionDetails.bpm,
-                )
-                SessionDetailsRow(
-                    labelResID = R.string.measures,
-                    sessionDetail = if (sessionUiState.sessionDetails.measures.isNullOrBlank()) "N/A" else sessionUiState.sessionDetails.measures,
-                )
-                SessionDetailsRow(
-                    labelResID = R.string.duration,
-                    sessionDetail = formatDuration(sessionUiState.sessionDetails.durationMillis),
-                )
-                SessionDetailsRow(
-                    labelResID = R.string.date,
-                    sessionDetail = sessionUiState.sessionDetails.date,
-                )
-                SessionDetailsRow(
-                    labelResID = R.string.timestamp,
-                    sessionDetail = formatTimestamp(sessionUiState.sessionDetails.timestamp),
+            if (!sessionUiState.sessionDetails.composer.isNullOrBlank()) {
+                Text(
+                    text = stringResource(R.string.by_composer, sessionUiState.sessionDetails.composer),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontStyle = FontStyle.Italic,
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
+        }
+
+        HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
+
+        // Details Grid/List
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            DetailItem(
+                label = stringResource(R.string.duration),
+                value = formatDuration(sessionUiState.sessionDetails.durationMillis),
+                isHighlight = true
+            )
+            DetailItem(
+                label = stringResource(R.string.bpm),
+                value = if (sessionUiState.sessionDetails.bpm.isNullOrBlank()) {
+                    stringResource(R.string.empty_value)
+                } else {
+                    stringResource(R.string.bpm_format, sessionUiState.sessionDetails.bpm)
+                }
+            )
+            DetailItem(
+                label = stringResource(R.string.measures),
+                value = if (sessionUiState.sessionDetails.measures.isNullOrBlank()) {
+                    stringResource(R.string.empty_value)
+                } else {
+                    stringResource(R.string.measures_format, sessionUiState.sessionDetails.measures)
+                }
+            )
+            DetailItem(
+                label = stringResource(R.string.date),
+                value = sessionUiState.sessionDetails.date
+            )
+            DetailItem(
+                label = stringResource(R.string.timestamp),
+                value = formatTimestamp(sessionUiState.sessionDetails.timestamp)
+            )
         }
     }
 }
 
 @Composable
-private fun SessionDetailsRow(
-    @StringRes labelResID: Int, sessionDetail: String, modifier: Modifier = Modifier
+private fun DetailItem(
+    label: String,
+    value: String,
+    isHighlight: Boolean = false
 ) {
-    Row(modifier = modifier) {
-        Text(text = stringResource(labelResID), style = MaterialTheme.typography.labelLarge)
-        Spacer(modifier = Modifier.weight(1f))
-        Text(text = sessionDetail, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyLarge)
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.outline
+        )
+        Text(
+            text = value,
+            style = if (isHighlight) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.bodyLarge,
+            color = if (isHighlight) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+            fontWeight = if (isHighlight) FontWeight.Bold else FontWeight.Normal
+        )
     }
 }
 
@@ -168,30 +189,48 @@ private fun DeleteConfirmationDialog(
     onDeleteCancel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AlertDialog(onDismissRequest = { /* Do nothing */ },
-        title = { Text(stringResource(R.string.delete)) },
-        text = { Text(stringResource(R.string.delete_question)) },
+    AlertDialog(
+        onDismissRequest = { onDeleteCancel() },
+        title = { 
+            Text(
+                stringResource(R.string.delete), 
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.error
+            ) 
+        },
+        text = { 
+            Text(
+                stringResource(R.string.delete_question),
+                style = MaterialTheme.typography.bodyMedium
+            ) 
+        },
         modifier = modifier,
         dismissButton = {
             TextButton(onClick = onDeleteCancel) {
-                Text(text = stringResource(R.string.no))
+                Text(stringResource(R.string.no), color = MaterialTheme.colorScheme.outline)
             }
         },
         confirmButton = {
             TextButton(onClick = onDeleteConfirm) {
-                Text(text = stringResource(R.string.yes))
+                Text(stringResource(R.string.yes), color = MaterialTheme.colorScheme.error)
             }
-        })
+        }
+    )
 }
 
+@Composable
 private fun formatDuration(millis: Long): String {
     val seconds = (millis / 1000) % 60
     val minutes = (millis / (1000 * 60)) % 60
     val hours = (millis / (1000 * 60 * 60))
-    return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    return if (hours > 0) {
+        stringResource(R.string.duration_h_m_s, hours, minutes, seconds)
+    } else {
+        stringResource(R.string.duration_m_s, minutes, seconds)
+    }
 }
 
 private fun formatTimestamp(timestamp: Long): String {
-    return if (timestamp == 0L) "N/A"
-    else SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
+    return if (timestamp == 0L) "—"
+    else SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date(timestamp))
 }

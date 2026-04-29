@@ -5,15 +5,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,7 +33,7 @@ fun SessionEntryScreen(
     Scaffold(
         topBar = {
             IvoryPianoTopAppBar(
-                title = stringResource(SessionEntryDestination.titleRes),
+                title = "New Practice Entry",
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp
             )
@@ -73,8 +70,8 @@ fun SessionEntryBody(
     modifier: Modifier = Modifier
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier.padding(16.dp)
+        verticalArrangement = Arrangement.spacedBy(32.dp),
+        modifier = modifier.padding(24.dp)
     ) {
         TimerSection(
             timerMillis = sessionUiState.timerMillis,
@@ -85,6 +82,8 @@ fun SessionEntryBody(
             modifier = Modifier.fillMaxWidth()
         )
 
+        HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
+
         SessionInputForm(
             sessionDetails = sessionUiState.sessionDetails,
             onValueChange = onSessionValueChange,
@@ -94,10 +93,19 @@ fun SessionEntryBody(
         Button(
             onClick = onSaveClick,
             enabled = sessionUiState.isEntryValid,
-            shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ),
+            shape = MaterialTheme.shapes.extraLarge,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
         ) {
-            Text(stringResource(R.string.save))
+            Text(
+                stringResource(R.string.save),
+                style = MaterialTheme.typography.titleMedium
+            )
         }
     }
 }
@@ -116,25 +124,44 @@ fun TimerSection(
     val hours = (timerMillis / (1000 * 60 * 60))
     val timeDisplay = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
-    Card(modifier = modifier) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Practice Duration",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.outline
+        )
+        Text(
+            text = timeDisplay,
+            style = MaterialTheme.typography.displayLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text(
-                text = timeDisplay,
-                style = MaterialTheme.typography.displayMedium
-            )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                if (!isRunning) {
-                    Button(onClick = onStart) { Text("Start") }
-                } else {
-                    Button(onClick = onPause) { Text("Pause") }
+            if (!isRunning) {
+                Button(
+                    onClick = onStart,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                ) { 
+                    Text("Start Timer") 
                 }
-                OutlinedButton(onClick = onReset) { Text("Reset") }
+            } else {
+                OutlinedButton(onClick = onPause) { 
+                    Text("Pause") 
+                }
+            }
+            TextButton(
+                onClick = onReset,
+                colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.outline)
+            ) { 
+                Text("Reset") 
             }
         }
     }
@@ -149,30 +176,49 @@ fun SessionInputForm(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        OutlinedTextField(
-            value = sessionDetails.pieceName ?: "",
-            onValueChange = { onValueChange(sessionDetails.copy(pieceName = it)) },
-            label = { Text(stringResource(R.string.piece_name)) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-        OutlinedTextField(
-            value = sessionDetails.composer ?: "",
-            onValueChange = { onValueChange(sessionDetails.copy(composer = it)) },
-            label = { Text(stringResource(R.string.composer)) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(
+                text = "Composition Details",
+                style = MaterialTheme.typography.titleMedium,
+                fontStyle = FontStyle.Italic,
+                color = MaterialTheme.colorScheme.secondary
+            )
+            
+            OutlinedTextField(
+                value = sessionDetails.pieceName ?: "",
+                onValueChange = { onValueChange(sessionDetails.copy(pieceName = it)) },
+                label = { Text("Title of the Piece") },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = enabled,
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+                )
+            )
+            
+            OutlinedTextField(
+                value = sessionDetails.composer ?: "",
+                onValueChange = { onValueChange(sessionDetails.copy(composer = it)) },
+                label = { Text(stringResource(R.string.composer)) },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = enabled,
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+                )
+            )
+        }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             OutlinedTextField(
                 value = sessionDetails.bpm ?: "",
                 onValueChange = { onValueChange(sessionDetails.copy(bpm = it)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                label = { Text(stringResource(R.string.bpm)) },
+                label = { Text("Tempo (BPM)") },
                 modifier = Modifier.weight(1f),
                 enabled = enabled,
                 singleLine = true
@@ -180,7 +226,7 @@ fun SessionInputForm(
             OutlinedTextField(
                 value = sessionDetails.measures ?: "",
                 onValueChange = { onValueChange(sessionDetails.copy(measures = it)) },
-                label = { Text(stringResource(R.string.measures)) },
+                label = { Text("Measures") },
                 modifier = Modifier.weight(1f),
                 enabled = enabled,
                 singleLine = true

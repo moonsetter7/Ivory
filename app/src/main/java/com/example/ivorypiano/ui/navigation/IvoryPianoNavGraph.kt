@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.ivorypiano.ui.session.*
+import com.example.ivorypiano.ui.user.*
 
 /**
  * Provides Navigation graph for the application.
@@ -19,9 +20,27 @@ fun IvoryPianoNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = LoginDestination.route,
         modifier = modifier
     ) {
+        composable(route = LoginDestination.route) {
+            LoginScreen(
+                onLoginSuccess = {
+                    /**
+                     * Removes login screen from backstack once signed in
+                     */
+                    navController.navigate(HomeDestination.route) {
+                        popUpTo(LoginDestination.route) { inclusive = true }
+                    }
+                },
+                onRegisterClick = { navController.navigate(UserEntryDestination.route) }
+            )
+        }
+        composable(route = UserEntryDestination.route) {
+            UserEntryScreen(
+                navigateBack = { navController.popBackStack() }
+            )
+        }
         composable(route = HomeDestination.route) {
             HomeScreen(
                 navigateToSessionEntry = { navController.navigate(SessionEntryDestination.route) },
