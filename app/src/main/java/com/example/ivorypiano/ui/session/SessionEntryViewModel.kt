@@ -1,6 +1,8 @@
 package com.example.ivorypiano.ui.session
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.ivorypiano.data.PianoSession
 import com.example.ivorypiano.data.SessionsRepository
@@ -8,16 +10,43 @@ import com.example.ivorypiano.data.SessionsRepository
 /**
  * ViewModel to validate and insert sessions into the room database
  */
-class PianoSessionViewModel(private val sessionsRepository: SessionsRepository) : ViewModel() {
+class SessionEntryViewModel(private val sessionsRepository: SessionsRepository) : ViewModel() {
+
     /**
      * Holds current session ui state
      */
     var sessionUiState by mutableStateOf(SessionUiState())
         private set
+
+    /**
+     * Updates the [sessionUiState] with the value provided in the argument. This method also triggers
+     * a validation for input values.
+     */
+    fun updateUiState(sessionDetails: SessionDetails) {
+        sessionUiState =
+            SessionUiState(sessionDetails = sessionDetails, isEntryValid = validateInput(sessionDetails))
+    }
+
+    /**
+     * Inserts a [PianoSession] into the Room database
+     */
+    suspend fun saveSession() {
+        if (validateInput(sessionUiState.sessionDetails)) {
+            sessionsRepository.insertSession(sessionUiState.sessionDetails.toSession())
+        }
+    }
+
+    private fun validateInput(uiState: SessionDetails = sessionUiState.sessionDetails): Boolean {
+        return with(uiState) {
+            date.isNotBlank() &&
+            timestamp.toString().isNotBlank() &&
+            durationMillis.toString().isNotBlank()
+        }
+    }
 }
 
-/*
-Represents the UI State for a Piano session
+/**
+ * Represents the UI State for a Piano session
  */
 data class SessionUiState(
     val sessionDetails: SessionDetails = SessionDetails(),
@@ -66,7 +95,6 @@ fun PianoSession.toSessionDetails(): SessionDetails = SessionDetails(
     measures = measures,
 )
 
-
 /**
  * Extension function converting PianoSession to Session UI State
  */
@@ -74,11 +102,3 @@ fun PianoSession.toSessionUiState(isEntryValid: Boolean = false): SessionUiState
     sessionDetails = this.toSessionDetails(),
     isEntryValid = isEntryValid
 )
-
-private fun validateInput(uiState: SessionDetails = SessionDetails()): Boolean {
-    return with(uiState) {
-        date.isNotBlank() &&
-        timestamp.toString().isNotBlank() &&
-        durationMillis.toString().isNotBlank()
-    }
-}
