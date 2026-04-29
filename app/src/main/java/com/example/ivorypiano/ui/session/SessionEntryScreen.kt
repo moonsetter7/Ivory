@@ -13,10 +13,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ivorypiano.IvoryPianoTopAppBar
+import com.example.ivorypiano.R
 import com.example.ivorypiano.ui.AppViewModelProvider
 import com.example.ivorypiano.ui.theme.IvoryPianoTheme
 import kotlinx.coroutines.launch
@@ -26,15 +29,16 @@ import kotlinx.coroutines.launch
 fun SessionEntryScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
-    modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true,
     viewModel: SessionEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Log Practice Session") }
+            IvoryPianoTopAppBar(
+                title = stringResource(SessionEntryDestination.titleRes),
+                canNavigateBack = canNavigateBack,
+                navigateUp = onNavigateUp
             )
         }
     ) { innerPadding ->
@@ -50,7 +54,7 @@ fun SessionEntryScreen(
                     navigateBack()
                 }
             },
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
@@ -93,7 +97,7 @@ fun SessionEntryBody(
             shape = MaterialTheme.shapes.small,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Save Session")
+            Text(stringResource(R.string.save))
         }
     }
 }
@@ -150,7 +154,7 @@ fun SessionInputForm(
         OutlinedTextField(
             value = sessionDetails.pieceName ?: "",
             onValueChange = { onValueChange(sessionDetails.copy(pieceName = it)) },
-            label = { Text("Piece Name*") },
+            label = { Text(stringResource(R.string.piece_name)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
@@ -158,7 +162,7 @@ fun SessionInputForm(
         OutlinedTextField(
             value = sessionDetails.composer ?: "",
             onValueChange = { onValueChange(sessionDetails.copy(composer = it)) },
-            label = { Text("Composer") },
+            label = { Text(stringResource(R.string.composer)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
@@ -168,7 +172,7 @@ fun SessionInputForm(
                 value = sessionDetails.bpm ?: "",
                 onValueChange = { onValueChange(sessionDetails.copy(bpm = it)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                label = { Text("BPM") },
+                label = { Text(stringResource(R.string.bpm)) },
                 modifier = Modifier.weight(1f),
                 enabled = enabled,
                 singleLine = true
@@ -176,7 +180,7 @@ fun SessionInputForm(
             OutlinedTextField(
                 value = sessionDetails.measures ?: "",
                 onValueChange = { onValueChange(sessionDetails.copy(measures = it)) },
-                label = { Text("Measures") },
+                label = { Text(stringResource(R.string.measures)) },
                 modifier = Modifier.weight(1f),
                 enabled = enabled,
                 singleLine = true

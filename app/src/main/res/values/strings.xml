@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">IvoryPiano</string>
+    <string name="session_entry_title">Log Practice Session</string>
+    <string name="session_details_title">Session Details</string>
+    <string name="piece_name">Piece Name</string>
+    <string name="composer">Composer</string>
+    <string name="bpm">BPM</string>
+    <string name="measures">Measures</string>
+    <string name="duration">Duration</string>
+    <string name="date">Date</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="no_sessions">No practice sessions yet.</string>
+    <string name="delete_question">Are you sure you want to delete this session?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

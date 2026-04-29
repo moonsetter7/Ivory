@@ -1,11 +1,13 @@
 package com.example.ivorypiano.ui
 
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.ivorypiano.IvoryPianoApplication
 import com.example.ivorypiano.ui.session.HomeViewModel
+import com.example.ivorypiano.ui.session.SessionDetailsViewModel
 import com.example.ivorypiano.ui.session.SessionEntryViewModel
 
 /**
@@ -20,6 +22,13 @@ object AppViewModelProvider {
         // Initializer for SessionEntryViewModel
         initializer {
             SessionEntryViewModel(ivoryPianoApplication().container.sessionsRepository)
+        }
+        // Initializer for SessionDetailsViewModel
+        initializer {
+            SessionDetailsViewModel(
+                this.createSavedStateHandle(),
+                ivoryPianoApplication().container.sessionsRepository
+            )
         }
     }
 }

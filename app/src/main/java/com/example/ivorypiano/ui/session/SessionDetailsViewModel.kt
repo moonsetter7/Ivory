@@ -39,7 +39,3 @@ class SessionDetailsViewModel(
         private const val TIMEOUT_MILLIS = 5_000L
     }
 }
-
-object SessionDetailsDestination {
-    const val sessionIdArg = "sessionId"
-}
