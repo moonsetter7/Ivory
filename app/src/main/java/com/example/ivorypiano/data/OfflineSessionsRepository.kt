@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 class OfflineSessionsRepository(private val sessionDao: PianoSessionDao) : SessionsRepository {
     override fun getAllSessionsStream(): Flow<List<PianoSession>> = sessionDao.getAllSessions()
 
+    override fun getAllSessionsForUserStream(userId: Int): Flow<List<PianoSession>> = sessionDao.getAllSessionsForUser(userId)
+
     override fun getSessionStream(id: Int): Flow<PianoSession?> = sessionDao.getSession(id)
 
     override suspend fun insertSession(session: PianoSession) = sessionDao.insert(session)

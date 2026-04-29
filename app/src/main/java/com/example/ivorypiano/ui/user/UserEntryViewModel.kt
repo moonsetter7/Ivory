@@ -1,8 +1,10 @@
 package com.example.ivorypiano.ui.user
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import com.example.ivorypiano.data.User
 import com.example.ivorypiano.data.UsersRepository
@@ -84,3 +86,5 @@ fun User.toUserUiState(isEntryValid: Boolean = false): UserUiState = UserUiState
     userDetails = this.toUserDetails(),
     isEntryValid = isEntryValid
 )
+
+
