@@ -11,8 +11,13 @@ interface SessionsRepository {
      */
     fun getAllSessionsStream(): Flow<List<PianoSession>>
 
-    /*
-    Retrieve a session from the given data source based on its ID
+    /**
+     * Retrieve all sessions for a specific user.
+     */
+    fun getAllSessionsForUserStream(userId: Int): Flow<List<PianoSession>>
+
+    /**
+     * Retrieve a session from the given data source based on its ID.
      */
     fun getSessionStream(id: Int): Flow<PianoSession?>
 

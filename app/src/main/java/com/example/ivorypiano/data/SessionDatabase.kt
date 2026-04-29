@@ -5,15 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-/*
-Defines the list of entites and DAOs.
-
- */
-
-@Database(entities = [PianoSession::class], version = 1, exportSchema = false)
-abstract class SessionDatabase : RoomDatabase(){
+@Database(entities = [PianoSession::class, User::class], version = 1, exportSchema = false)
+abstract class SessionDatabase : RoomDatabase() {
 
     abstract fun sessionDao(): PianoSessionDao
+    abstract fun userDao(): UserDao
 
     // singleton magic
     companion object{
@@ -27,7 +23,7 @@ abstract class SessionDatabase : RoomDatabase(){
                 Room.databaseBuilder(context, SessionDatabase::class.java, "session_database")
                     .fallbackToDestructiveMigration()
                     .build()
-                    .also { Instance = it}
+                    .also { Instance = it }
             }
         }
     }

@@ -1,14 +1,23 @@
 package com.example.ivorypiano.ui.session
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.ivorypiano.data.PianoSession
 import com.example.ivorypiano.data.SessionsRepository
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
- * ViewModel to validate and insert sessions into the room database
+ * ViewModel to validate and insert sessions into the room database, 
+ * including Pomodoro timer logic.
  */
 class SessionEntryViewModel(private val sessionsRepository: SessionsRepository) : ViewModel() {
 
@@ -17,6 +26,8 @@ class SessionEntryViewModel(private val sessionsRepository: SessionsRepository) 
      */
     var sessionUiState by mutableStateOf(SessionUiState())
         private set
+
+    private var timerJob: Job? = null
 
     /**
      * Updates the [sessionUiState] with the value provided in the argument. This method also triggers
@@ -28,11 +39,56 @@ class SessionEntryViewModel(private val sessionsRepository: SessionsRepository) 
     }
 
     /**
-     * Inserts a [PianoSession] into the Room database
+     * Starts or resumes the Pomodoro timer.
+     */
+    fun startTimer() {
+        if (sessionUiState.isTimerRunning) return
+        
+        sessionUiState = sessionUiState.copy(isTimerRunning = true)
+        timerJob = viewModelScope.launch {
+            while (true) {
+                delay(1000)
+                val newMillis = sessionUiState.timerMillis + 1000
+                sessionUiState = sessionUiState.copy(
+                    timerMillis = newMillis,
+                    sessionDetails = sessionUiState.sessionDetails.copy(
+                        durationMillis = newMillis
+                    )
+                )
+            }
+        }
+    }
+
+    /**
+     * Pauses the Pomodoro timer.
+     */
+    fun pauseTimer() {
+        timerJob?.cancel()
+        sessionUiState = sessionUiState.copy(isTimerRunning = false)
+    }
+
+    /**
+     * Resets the timer.
+     */
+    fun resetTimer() {
+        pauseTimer()
+        sessionUiState = sessionUiState.copy(
+            timerMillis = 0L,
+            sessionDetails = sessionUiState.sessionDetails.copy(durationMillis = 0L)
+        )
+    }
+
+    /**
+     * Inserts a [PianoSession] into the Room database.
      */
     suspend fun saveSession() {
         if (validateInput(sessionUiState.sessionDetails)) {
-            sessionsRepository.insertSession(sessionUiState.sessionDetails.toSession())
+            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            val finalSession = sessionUiState.sessionDetails.copy(
+                date = date,
+                timestamp = System.currentTimeMillis()
+            )
+            sessionsRepository.insertSession(finalSession.toSession())
         }
     }
 
@@ -50,7 +106,9 @@ class SessionEntryViewModel(private val sessionsRepository: SessionsRepository) 
  */
 data class SessionUiState(
     val sessionDetails: SessionDetails = SessionDetails(),
-    val isEntryValid: Boolean = false
+    val isEntryValid: Boolean = false,
+    val timerMillis: Long = 0L,
+    val isTimerRunning: Boolean = false
 )
 
 data class SessionDetails(

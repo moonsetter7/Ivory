@@ -20,8 +20,7 @@ This interface provides all the convenient methods for querying, inserting, dele
 the database.
  */
 interface PianoSessionDao {
-    // DAO functions are asynchronous since they take forever to execute.
-    @Insert(onConflict = OnConflictStrategy.IGNORE) // if a new session conflicts, ignore it
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(session: PianoSession)
 
     @Update
@@ -30,13 +29,12 @@ interface PianoSessionDao {
     @Delete
     suspend fun delete(session: PianoSession)
 
-    // Get all fields of a session based on its ID (primary key)
     @Query("SELECT * from practice_sessions WHERE id = :id")
     fun getSession(id: Int): Flow<PianoSession>
 
-    // Get all sessions in descending order by date
+    @Query("SELECT * from practice_sessions WHERE userId = :userId ORDER BY date DESC")
+    fun getAllSessionsForUser(userId: Int): Flow<List<PianoSession>>
+
     @Query("SELECT * from practice_sessions ORDER BY date DESC")
     fun getAllSessions(): Flow<List<PianoSession>>
-
 }
-

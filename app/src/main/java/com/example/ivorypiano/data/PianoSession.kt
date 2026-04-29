@@ -1,7 +1,6 @@
 package com.example.ivorypiano.data
 
 import androidx.annotation.NonNull
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -11,11 +10,11 @@ import androidx.room.PrimaryKey
  * Additionally, an ID is needed as a unique identifier for
  * each row in the database.
  */
-
 @Entity(tableName = "practice_sessions")
 data class PianoSession(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0, // auto-increment
-    //mark non-null to prevent app from accidentally saving a corrupted session
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val userId: Int = 0, // Links session to a specific user
     @NonNull val date: String,
     @NonNull val timestamp: Long,
     @NonNull val durationMillis: Long,
