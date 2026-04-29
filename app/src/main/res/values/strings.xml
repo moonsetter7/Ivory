@@ -31,6 +31,7 @@
     <string name="register_title">Join Ivory</string>
     <string name="register_description">Create an account to start tracking your piano sessions</string>
     <string name="username_label">Username</string>
+    <string name="password_label">Password</string>
     <string name="email_label">Email Address</string>
     <string name="login_action">Enter</string>
     <string name="register_action">Begin Journey</string>
@@ -41,4 +42,6 @@
 
     <string name="invalid_username">Please choose a name for your artistic identity.</string>
     <string name="invalid_email">A valid email address is required for your diary.</string>
+    <string name="invalid_password">Your password must be at least 6 characters long.</string>
+    <string name="login_failed">The username or password you provided is incorrect.</string>
 </resources>

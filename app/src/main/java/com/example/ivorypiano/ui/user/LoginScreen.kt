@@ -1,12 +1,15 @@
 package com.example.ivorypiano.ui.user
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ivorypiano.R
@@ -60,12 +63,35 @@ fun LoginScreen(
             )
             
             OutlinedTextField(
-                value = loginUiState.username,
-                onValueChange = { viewModel.updateUiState(it) },
+                value = loginUiState.loginDetails.username,
+                onValueChange = { viewModel.updateUiState(loginUiState.loginDetails.copy(username = it)) },
                 label = { Text(stringResource(R.string.username_label)) },
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                singleLine = true,
+                isError = loginUiState.isLoginError
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = loginUiState.loginDetails.password,
+                onValueChange = { viewModel.updateUiState(loginUiState.loginDetails.copy(password = it)) },
+                label = { Text(stringResource(R.string.password_label)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                isError = loginUiState.isLoginError
+            )
+
+            if (loginUiState.isLoginError) {
+                Text(
+                    text = stringResource(R.string.login_failed),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(top = 8.dp).align(Alignment.Start)
+                )
+            }
             
             Spacer(modifier = Modifier.height(32.dp))
             

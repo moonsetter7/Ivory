@@ -43,14 +43,16 @@ object AppViewModelProvider {
         initializer {
             UserEntryViewModel(
                 ivoryPianoApplication().container.usersRepository,
-                ivoryPianoApplication().container.userSessionRepository
+                ivoryPianoApplication().container.userSessionRepository,
+                ivoryPianoApplication().container.securityManager
             )
         }
         // Initializer for LoginViewModel
         initializer {
             LoginViewModel(
                 ivoryPianoApplication().container.usersRepository,
-                ivoryPianoApplication().container.userSessionRepository
+                ivoryPianoApplication().container.userSessionRepository,
+                ivoryPianoApplication().container.securityManager
             )
         }
     }

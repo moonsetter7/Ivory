@@ -60,5 +60,7 @@ dependencies {
     //Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
+    // Security
+    implementation(libs.androidx.security.crypto)
     ksp(libs.androidx.room.compiler)
 }

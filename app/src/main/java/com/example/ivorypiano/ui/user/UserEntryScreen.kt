@@ -7,7 +7,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ivorypiano.R
@@ -75,6 +75,12 @@ fun UserEntryBody(
             onValueChange = { onUserValueChange(userUiState.userDetails.copy(username = it)) },
             label = { Text(stringResource(R.string.username_label)) },
             modifier = Modifier.fillMaxWidth(),
+            isError = userUiState.usernameError,
+            supportingText = {
+                if (userUiState.usernameError) {
+                    Text(stringResource(R.string.invalid_username))
+                }
+            },
             singleLine = true
         )
         
@@ -85,6 +91,32 @@ fun UserEntryBody(
             onValueChange = { onUserValueChange(userUiState.userDetails.copy(email = it)) },
             label = { Text(stringResource(R.string.email_label)) },
             modifier = Modifier.fillMaxWidth(),
+            isError = userUiState.emailError,
+            supportingText = {
+                if (userUiState.emailError) {
+                    Text(stringResource(R.string.invalid_email))
+                }
+            },
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = userUiState.userDetails.password,
+            onValueChange = { onUserValueChange(userUiState.userDetails.copy(password = it)) },
+            label = { Text(stringResource(R.string.password_label)) },
+            modifier = Modifier.fillMaxWidth(),
+            isError = userUiState.passwordError,
+            /**
+             * Masks the password field from onlookers
+             */
+            visualTransformation = PasswordVisualTransformation(),
+            supportingText = {
+                if (userUiState.passwordError) {
+                    Text(stringResource(R.string.invalid_password))
+                }
+            },
             singleLine = true
         )
         

@@ -9,6 +9,7 @@ interface AppContainer {
     val sessionsRepository: SessionsRepository
     val usersRepository: UsersRepository
     val userSessionRepository: UserSessionRepository
+    val securityManager: SecurityManager
 }
 
 /**
@@ -29,5 +30,9 @@ class AppDataContainer(private val context: Context) : AppContainer {
      */
     override val userSessionRepository: UserSessionRepository by lazy {
         InMemoryUserSessionRepository()
+    }
+
+    override val securityManager: SecurityManager by lazy {
+        SecurityManager(context)
     }
 }
