@@ -44,4 +44,6 @@
     <string name="invalid_email">A valid email address is required for your diary.</string>
     <string name="invalid_password">Your password must be at least 6 characters long.</string>
     <string name="login_failed">The username or password you provided is incorrect.</string>
+    <string name="username_taken">This username is already in use.</string>
+    <string name="email_taken">This email is already in use.</string>
 </resources>

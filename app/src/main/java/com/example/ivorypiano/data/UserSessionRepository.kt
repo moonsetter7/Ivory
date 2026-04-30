@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 interface UserSessionRepository {
     val currentUserId: StateFlow<Int?>
     fun setUserId(id: Int?)
+    fun clearSession()
 }
 
 class InMemoryUserSessionRepository : UserSessionRepository {
@@ -19,5 +20,9 @@ class InMemoryUserSessionRepository : UserSessionRepository {
 
     override fun setUserId(id: Int?) {
         _currentUserId.value = id
+    }
+
+    override fun clearSession() {
+        _currentUserId.value = null
     }
 }

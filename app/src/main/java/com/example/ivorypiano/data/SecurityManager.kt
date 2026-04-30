@@ -33,16 +33,33 @@ class SecurityManager(context: Context) {
     }
 
     /**
-     * Securely stores the last logged-in artist's name.
+     * Securely stores the active session details.
      */
-    fun saveLastUser(username: String) {
-        sharedPreferences.edit().putString("last_user", username).apply()
+    fun saveSession(userId: Int, username: String) {
+        sharedPreferences.edit()
+            .putInt("last_user_id", userId)
+            .putString("last_user_name", username)
+            .apply()
     }
 
     /**
-     * Retrieves the last logged-in artist's name.
+     * Retrieves the last logged-in user's ID.
      */
-    fun getLastUser(): String? {
-        return sharedPreferences.getString("last_user", null)
+    fun getLastUserId(): Int {
+        return sharedPreferences.getInt("last_user_id", -1)
+    }
+
+    /**
+     * Retrieves the last logged-in user's name.
+     */
+    fun getLastUserName(): String? {
+        return sharedPreferences.getString("last_user_name", null)
+    }
+
+    /**
+     * Clears the stored session (for logout functionality later).
+     */
+    fun clearSession() {
+        sharedPreferences.edit().clear().apply()
     }
 }

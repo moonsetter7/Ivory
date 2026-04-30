@@ -23,7 +23,7 @@ class LoginViewModel(
      */
     var loginUiState by mutableStateOf(
         LoginUiState(
-            loginDetails = LoginDetails(username = securityManager.getLastUser() ?: "")
+            loginDetails = LoginDetails(username = securityManager.getLastUserName() ?: "")
         )
     )
         private set
@@ -47,7 +47,7 @@ class LoginViewModel(
             val hashedInput = securityManager.hashPassword(loginUiState.loginDetails.password)
             if (user.passwordHash == hashedInput) {
                 userSessionRepository.setUserId(user.id)
-                securityManager.saveLastUser(user.username)
+                securityManager.saveSession(user.id, user.username)
                 true
             } else {
                 false

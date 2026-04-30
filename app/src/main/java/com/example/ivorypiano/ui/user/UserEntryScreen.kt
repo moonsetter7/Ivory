@@ -41,7 +41,10 @@ fun UserEntryScreen(
             onSaveClick = {
                 coroutineScope.launch {
                     viewModel.saveUser()
-                    navigateBack()
+                    // Only navigate back if the user was successfully established
+                    if (viewModel.userUiState.isEntryValid) {
+                        navigateBack()
+                    }
                 }
             },
             modifier = modifier.padding(innerPadding)
@@ -75,9 +78,11 @@ fun UserEntryBody(
             onValueChange = { onUserValueChange(userUiState.userDetails.copy(username = it)) },
             label = { Text(stringResource(R.string.username_label)) },
             modifier = Modifier.fillMaxWidth(),
-            isError = userUiState.usernameError,
+            isError = userUiState.usernameError || userUiState.isUsernameTaken,
             supportingText = {
-                if (userUiState.usernameError) {
+                if (userUiState.isUsernameTaken) {
+                    Text(stringResource(R.string.username_taken))
+                } else if (userUiState.usernameError) {
                     Text(stringResource(R.string.invalid_username))
                 }
             },
@@ -91,9 +96,11 @@ fun UserEntryBody(
             onValueChange = { onUserValueChange(userUiState.userDetails.copy(email = it)) },
             label = { Text(stringResource(R.string.email_label)) },
             modifier = Modifier.fillMaxWidth(),
-            isError = userUiState.emailError,
+            isError = userUiState.emailError || userUiState.isEmailTaken,
             supportingText = {
-                if (userUiState.emailError) {
+                if (userUiState.isEmailTaken) {
+                    Text(stringResource(R.string.email_taken))
+                } else if (userUiState.emailError) {
                     Text(stringResource(R.string.invalid_email))
                 }
             },
