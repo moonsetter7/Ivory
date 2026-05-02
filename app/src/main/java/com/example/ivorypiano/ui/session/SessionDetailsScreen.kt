@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,12 +25,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ivorypiano.IvoryPianoTopAppBar
 import com.example.ivorypiano.R
 import com.example.ivorypiano.ui.AppViewModelProvider
+import com.example.ivorypiano.ui.DevicePreviews
+import com.example.ivorypiano.ui.theme.IvoryPianoTheme
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SessionDetailsScreen(
     navigateToEditSession: (Int) -> Unit,
@@ -37,9 +39,32 @@ fun SessionDetailsScreen(
     modifier: Modifier = Modifier,
     viewModel: SessionDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
+    SessionDetailsScreenContent(
+        sessionUiState = uiState,
+        onDeleteConfirm = {
+            coroutineScope.launch {
+                viewModel.deleteSession()
+                navigateBack()
+            }
+        },
+        onEditClick = navigateToEditSession,
+        navigateBack = navigateBack,
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SessionDetailsScreenContent(
+    sessionUiState: SessionUiState,
+    onDeleteConfirm: () -> Unit,
+    onEditClick: (Int) -> Unit,
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
         topBar = {
             IvoryPianoTopAppBar(
@@ -49,36 +74,52 @@ fun SessionDetailsScreen(
             )
         },
         floatingActionButton = {
-            var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-            FloatingActionButton(
-                onClick = { deleteConfirmationRequired = true },
-                containerColor = MaterialTheme.colorScheme.errorContainer,
-                contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                shape = MaterialTheme.shapes.extraLarge,
-                modifier = Modifier.padding(20.dp)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.End
             ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = stringResource(R.string.delete)
-                )
-            }
-            if (deleteConfirmationRequired) {
-                DeleteConfirmationDialog(
-                    onDeleteConfirm = {
-                        deleteConfirmationRequired = false
-                        coroutineScope.launch {
-                            viewModel.deleteSession()
-                            navigateBack()
-                        }
-                    },
-                    onDeleteCancel = { deleteConfirmationRequired = false },
-                    modifier = Modifier.padding(16.dp)
-                )
+                var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+
+                FloatingActionButton(
+                    onClick = { onEditClick(sessionUiState.sessionDetails.id) },
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    shape = MaterialTheme.shapes.large,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = stringResource(R.string.edit)
+                    )
+                }
+
+                FloatingActionButton(
+                    onClick = { deleteConfirmationRequired = true },
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                    shape = MaterialTheme.shapes.extraLarge,
+                    modifier = Modifier.padding(bottom = 20.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.delete)
+                    )
+                }
+
+                if (deleteConfirmationRequired) {
+                    DeleteConfirmationDialog(
+                        onDeleteConfirm = {
+                            deleteConfirmationRequired = false
+                            onDeleteConfirm()
+                        },
+                        onDeleteCancel = { deleteConfirmationRequired = false },
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
             }
         },
     ) { innerPadding ->
         SessionDetailsBody(
-            sessionUiState = uiState.value,
+            sessionUiState = sessionUiState,
             modifier = modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
@@ -233,4 +274,27 @@ private fun formatDuration(millis: Long): String {
 private fun formatTimestamp(timestamp: Long): String {
     return if (timestamp == 0L) "—"
     else SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date(timestamp))
+}
+
+@DevicePreviews
+@Composable
+fun SessionDetailsPreview() {
+    IvoryPianoTheme {
+        SessionDetailsScreenContent(
+            sessionUiState = SessionUiState(
+                sessionDetails = SessionDetails(
+                    pieceName = "Nocturne Op. 9 No. 2",
+                    composer = "Chopin",
+                    durationMillis = 270000,
+                    bpm = "72",
+                    measures = "34",
+                    date = "2026-04-11",
+                    timestamp = 1698400000000L
+                )
+            ),
+            onDeleteConfirm = {},
+            onEditClick = {},
+            navigateBack = {}
+        )
+    }
 }

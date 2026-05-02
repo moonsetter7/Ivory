@@ -8,11 +8,8 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
-/*
-Separating the persistence layer from the app using an abstract interface -- the DAO.
-Hides all the complexities of involved in performing database operations in the underlying
-persistence layer (Room in this case), separate from the rest of the application.
-Allows you to change the data layer independently of the app using the data.
+/**
+ * Data Access Object for piano practice sessions.
  */
 @Dao
 /*
@@ -30,7 +27,7 @@ interface PianoSessionDao {
     suspend fun delete(session: PianoSession)
 
     @Query("SELECT * from practice_sessions WHERE id = :id")
-    fun getSession(id: Int): Flow<PianoSession>
+    fun getSession(id: Int): Flow<PianoSession?>
 
     @Query("SELECT * from practice_sessions WHERE userId = :userId ORDER BY date DESC")
     fun getAllSessionsForUser(userId: Int): Flow<List<PianoSession>>

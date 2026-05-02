@@ -46,7 +46,18 @@ fun IvoryPianoNavHost(
                 navigateToSessionEntry = { navController.navigate(SessionEntryDestination.route) },
                 navigateToSessionUpdate = { sessionId ->
                     navController.navigate("${SessionDetailsDestination.route}/$sessionId")
-                }
+                },
+                navigateToProfile = { navController.navigate(ProfileDestination.route) }
+            )
+        }
+        composable(route = ProfileDestination.route) {
+            ProfileScreen(
+                onSignOut = {
+                    navController.navigate(LoginDestination.route) {
+                        popUpTo(HomeDestination.route) { inclusive = true }
+                    }
+                },
+                navigateBack = { navController.popBackStack() }
             )
         }
         composable(route = SessionEntryDestination.route) {
@@ -62,8 +73,21 @@ fun IvoryPianoNavHost(
             })
         ) {
             SessionDetailsScreen(
-                navigateToEditSession = { /* sessionId -> navController.navigate("${SessionEditDestination.route}/$sessionId") */ },
+                navigateToEditSession = { sessionId ->
+                    navController.navigate("${SessionEditDestination.route}/$sessionId")
+                },
                 navigateBack = { navController.navigateUp() }
+            )
+        }
+        composable(
+            route = SessionEditDestination.routeWithArgs,
+            arguments = listOf(navArgument(SessionEditDestination.sessionIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            SessionEditScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() }
             )
         }
     }

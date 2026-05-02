@@ -12,7 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ivorypiano.R
 import com.example.ivorypiano.ui.AppViewModelProvider
+import com.example.ivorypiano.ui.DevicePreviews
 import com.example.ivorypiano.ui.navigation.NavigationDestination
+import com.example.ivorypiano.ui.theme.IvoryPianoTheme
 import kotlinx.coroutines.launch
 
 object UserEntryDestination : NavigationDestination {
@@ -20,7 +22,6 @@ object UserEntryDestination : NavigationDestination {
     override val titleRes = R.string.register_title
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserEntryScreen(
     navigateBack: () -> Unit,
@@ -28,6 +29,30 @@ fun UserEntryScreen(
     viewModel: UserEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+    UserEntryScreenContent(
+        userUiState = viewModel.userUiState,
+        onUserValueChange = viewModel::updateUiState,
+        onSaveClick = {
+            coroutineScope.launch {
+                viewModel.saveUser()
+                // Only navigate back if the user was successfully established
+                if (viewModel.userUiState.isEntryValid) {
+                    navigateBack()
+                }
+            }
+        },
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserEntryScreenContent(
+    userUiState: UserUiState,
+    onUserValueChange: (UserDetails) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -36,17 +61,9 @@ fun UserEntryScreen(
         }
     ) { innerPadding ->
         UserEntryBody(
-            userUiState = viewModel.userUiState,
-            onUserValueChange = viewModel::updateUiState,
-            onSaveClick = {
-                coroutineScope.launch {
-                    viewModel.saveUser()
-                    // Only navigate back if the user was successfully established
-                    if (viewModel.userUiState.isEntryValid) {
-                        navigateBack()
-                    }
-                }
-            },
+            userUiState = userUiState,
+            onUserValueChange = onUserValueChange,
+            onSaveClick = onSaveClick,
             modifier = modifier.padding(innerPadding)
         )
     }
@@ -136,5 +153,17 @@ fun UserEntryBody(
         ) {
             Text(stringResource(R.string.register_action))
         }
+    }
+}
+
+@DevicePreviews
+@Composable
+fun UserEntryPreview() {
+    IvoryPianoTheme {
+        UserEntryScreenContent(
+            userUiState = UserUiState(),
+            onUserValueChange = {},
+            onSaveClick = {}
+        )
     }
 }

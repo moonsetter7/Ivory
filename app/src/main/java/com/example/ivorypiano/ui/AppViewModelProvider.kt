@@ -8,8 +8,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.ivorypiano.IvoryPianoApplication
 import com.example.ivorypiano.ui.session.HomeViewModel
 import com.example.ivorypiano.ui.session.SessionDetailsViewModel
+import com.example.ivorypiano.ui.session.SessionEditViewModel
 import com.example.ivorypiano.ui.session.SessionEntryViewModel
 import com.example.ivorypiano.ui.user.LoginViewModel
+import com.example.ivorypiano.ui.user.ProfileViewModel
 import com.example.ivorypiano.ui.user.UserEntryViewModel
 
 /**
@@ -39,6 +41,14 @@ object AppViewModelProvider {
                 ivoryPianoApplication().container.userSessionRepository
             )
         }
+        // Initializer for SessionEditViewModel
+        initializer {
+            SessionEditViewModel(
+                this.createSavedStateHandle(),
+                ivoryPianoApplication().container.sessionsRepository,
+                ivoryPianoApplication().container.userSessionRepository
+            )
+        }
         // Initializer for UserEntryViewModel
         initializer {
             UserEntryViewModel(
@@ -53,6 +63,14 @@ object AppViewModelProvider {
                 ivoryPianoApplication().container.usersRepository,
                 ivoryPianoApplication().container.userSessionRepository,
                 ivoryPianoApplication().container.securityManager
+            )
+        }
+        // Initializer for ProfileViewModel
+        initializer {
+            ProfileViewModel(
+                ivoryPianoApplication().container.usersRepository,
+                ivoryPianoApplication().container.sessionsRepository,
+                ivoryPianoApplication().container.userSessionRepository
             )
         }
     }

@@ -25,9 +25,12 @@ class HomeViewModel(
     private val _aggregationType = MutableStateFlow(AggregationType.NONE)
     val aggregationType: StateFlow<AggregationType> = _aggregationType
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
+
     /**
-     * Holds home ui state. The list of sessions are retrieved for the active user
-     * and aggregated based on the selected [AggregationType].
+     * Holds home ui state. The list of sessions are retrieved for the active user,
+     * filtered by the search query, and aggregated based on the selected [AggregationType].
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     val homeUiState: StateFlow<HomeUiState> = userSessionRepository.currentUserId
@@ -38,11 +41,21 @@ class HomeViewModel(
                 sessionsRepository.getAllSessionsForUserStream(userId)
             }
         }
-        .combine(_aggregationType) { sessions, type ->
+        .combine(_aggregationType) { sessions, type -> Pair(sessions, type) }
+        .combine(_searchQuery) { (sessions, type), query ->
+            val filteredSessions = if (query.isEmpty()) {
+                sessions
+            } else {
+                sessions.filter {
+                    it.pieceName.contains(query, ignoreCase = true) ||
+                            it.composer.contains(query, ignoreCase = true)
+                }
+            }
             HomeUiState(
-                sessionList = sessions,
-                aggregatedData = aggregateSessions(sessions, type),
-                aggregationType = type
+                sessionList = filteredSessions,
+                aggregatedData = aggregateSessions(filteredSessions, type),
+                aggregationType = type,
+                searchQuery = query
             )
         }.stateIn(
             scope = viewModelScope,
@@ -52,6 +65,10 @@ class HomeViewModel(
 
     fun setAggregationType(type: AggregationType) {
         _aggregationType.value = type
+    }
+
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
     }
 
     private fun aggregateSessions(
@@ -81,5 +98,6 @@ enum class AggregationType {
 data class HomeUiState(
     val sessionList: List<PianoSession> = listOf(),
     val aggregatedData: Map<String, List<PianoSession>> = emptyMap(),
-    val aggregationType: AggregationType = AggregationType.NONE
+    val aggregationType: AggregationType = AggregationType.NONE,
+    val searchQuery: String = ""
 )

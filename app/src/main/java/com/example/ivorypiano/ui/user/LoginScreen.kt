@@ -13,9 +13,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ivorypiano.IvoryPianoTopAppBar
 import com.example.ivorypiano.R
 import com.example.ivorypiano.ui.AppViewModelProvider
+import com.example.ivorypiano.ui.DevicePreviews
 import com.example.ivorypiano.ui.navigation.NavigationDestination
+import com.example.ivorypiano.ui.theme.IvoryPianoTheme
 import kotlinx.coroutines.launch
 
 object LoginDestination : NavigationDestination {
@@ -34,6 +37,30 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
     val loginUiState = viewModel.loginUiState
     
+    LoginBody(
+        loginUiState = loginUiState,
+        onUpdateUiState = viewModel::updateUiState,
+        onLoginClick = {
+            coroutineScope.launch {
+                if (viewModel.login()) {
+                    onLoginSuccess()
+                }
+            }
+        },
+        onRegisterClick = onRegisterClick,
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LoginBody(
+    loginUiState: LoginUiState,
+    onUpdateUiState: (LoginDetails) -> Unit,
+    onLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -55,7 +82,7 @@ fun LoginScreen(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            
+
             Text(
                 text = stringResource(R.string.login_description),
                 textAlign = TextAlign.Center,
@@ -63,10 +90,10 @@ fun LoginScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
-            
+
             OutlinedTextField(
                 value = loginUiState.loginDetails.username,
-                onValueChange = { viewModel.updateUiState(loginUiState.loginDetails.copy(username = it)) },
+                onValueChange = { onUpdateUiState(loginUiState.loginDetails.copy(username = it)) },
                 label = { Text(stringResource(R.string.username_label)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -77,7 +104,7 @@ fun LoginScreen(
 
             OutlinedTextField(
                 value = loginUiState.loginDetails.password,
-                onValueChange = { viewModel.updateUiState(loginUiState.loginDetails.copy(password = it)) },
+                onValueChange = { onUpdateUiState(loginUiState.loginDetails.copy(password = it)) },
                 label = { Text(stringResource(R.string.password_label)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -94,31 +121,42 @@ fun LoginScreen(
                     modifier = Modifier.padding(top = 8.dp).align(Alignment.Start)
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(32.dp))
-            
+
             Button(
-                onClick = {
-                    coroutineScope.launch {
-                        if (viewModel.login()) {
-                            onLoginSuccess()
-                        }
-                    }
-                },
+                onClick = onLoginClick,
                 enabled = loginUiState.isLoginEnabled,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.login_action))
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             TextButton(onClick = onRegisterClick) {
                 Text(
                     text = stringResource(R.string.no_account_prompt) + " " + stringResource(R.string.register_link),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+        }
+    }
+}
+
+@DevicePreviews
+@Composable
+fun LoginScreenPreview() {
+    IvoryPianoTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            LoginBody(
+                loginUiState = LoginUiState(),
+                onUpdateUiState = {},
+                onLoginClick = {},
+                onRegisterClick = {}
+            )
         }
     }
 }

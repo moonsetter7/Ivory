@@ -12,12 +12,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ivorypiano.IvoryPianoTopAppBar
 import com.example.ivorypiano.R
 import com.example.ivorypiano.ui.AppViewModelProvider
+import com.example.ivorypiano.ui.DevicePreviews
 import com.example.ivorypiano.ui.theme.IvoryPianoTheme
 import kotlinx.coroutines.launch
 
@@ -30,6 +30,36 @@ fun SessionEntryScreen(
     viewModel: SessionEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+    SessionEntryScreenContent(
+        sessionUiState = viewModel.sessionUiState,
+        onSessionValueChange = viewModel::updateUiState,
+        onStartTimer = viewModel::startTimer,
+        onPauseTimer = viewModel::pauseTimer,
+        onResetTimer = viewModel::resetTimer,
+        onSaveClick = {
+            coroutineScope.launch {
+                viewModel.saveSession()
+                navigateBack()
+            }
+        },
+        canNavigateBack = canNavigateBack,
+        onNavigateUp = onNavigateUp
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SessionEntryScreenContent(
+    sessionUiState: SessionUiState,
+    onSessionValueChange: (SessionDetails) -> Unit,
+    onStartTimer: () -> Unit,
+    onPauseTimer: () -> Unit,
+    onResetTimer: () -> Unit,
+    onSaveClick: () -> Unit,
+    canNavigateBack: Boolean,
+    onNavigateUp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
         topBar = {
             IvoryPianoTopAppBar(
@@ -40,18 +70,13 @@ fun SessionEntryScreen(
         }
     ) { innerPadding ->
         SessionEntryBody(
-            sessionUiState = viewModel.sessionUiState,
-            onSessionValueChange = viewModel::updateUiState,
-            onStartTimer = viewModel::startTimer,
-            onPauseTimer = viewModel::pauseTimer,
-            onResetTimer = viewModel::resetTimer,
-            onSaveClick = {
-                coroutineScope.launch {
-                    viewModel.saveSession()
-                    navigateBack()
-                }
-            },
-            modifier = Modifier
+            sessionUiState = sessionUiState,
+            onSessionValueChange = onSessionValueChange,
+            onStartTimer = onStartTimer,
+            onPauseTimer = onPauseTimer,
+            onResetTimer = onResetTimer,
+            onSaveClick = onSaveClick,
+            modifier = modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
@@ -67,20 +92,31 @@ fun SessionEntryBody(
     onPauseTimer: () -> Unit,
     onResetTimer: () -> Unit,
     onSaveClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isTimerVisible: Boolean = true
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = modifier.padding(24.dp)
     ) {
-        TimerSection(
-            timerMillis = sessionUiState.timerMillis,
-            isRunning = sessionUiState.isTimerRunning,
-            onStart = onStartTimer,
-            onPause = onPauseTimer,
-            onReset = onResetTimer,
-            modifier = Modifier.fillMaxWidth()
-        )
+        if (isTimerVisible) {
+            TimerSection(
+                timerMillis = sessionUiState.timerMillis,
+                isRunning = sessionUiState.isTimerRunning,
+                onStart = onStartTimer,
+                onPause = onPauseTimer,
+                onReset = onResetTimer,
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else {
+            DurationManualInput(
+                durationMillis = sessionUiState.sessionDetails.durationMillis,
+                onDurationChange = { newMillis ->
+                    onSessionValueChange(sessionUiState.sessionDetails.copy(durationMillis = newMillis))
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
         HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
@@ -168,6 +204,46 @@ fun TimerSection(
 }
 
 @Composable
+fun DurationManualInput(
+    durationMillis: Long,
+    onDurationChange: (Long) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // Displaying the duration in total minutes for manual editing
+    var textValue by remember(durationMillis) { 
+        mutableStateOf((durationMillis / 60000).toString()) 
+    }
+
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "Edit Duration",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.outline,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        OutlinedTextField(
+            value = textValue,
+            onValueChange = { newValue ->
+                if (newValue.all { it.isDigit() }) {
+                    textValue = newValue
+                    val minutes = newValue.toLongOrNull() ?: 0L
+                    onDurationChange(minutes * 60000)
+                }
+            },
+            label = { Text("Duration (minutes)") },
+            suffix = { Text("min") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+            )
+        )
+    }
+}
+
+@Composable
 fun SessionInputForm(
     sessionDetails: SessionDetails,
     onValueChange: (SessionDetails) -> Unit = {},
@@ -235,19 +311,29 @@ fun SessionInputForm(
     }
 }
 
-@Preview(showBackground = true)
+@DevicePreviews
 @Composable
-private fun SessionEntryScreenPreview() {
-    var uiState by remember { mutableStateOf(SessionUiState(isEntryValid = true)) }
+fun SessionEntryPreview() {
+    val uiState = SessionUiState(
+        sessionDetails = SessionDetails(
+            pieceName = "Moonlight Sonata",
+            composer = "Beethoven",
+            bpm = "60",
+            measures = "100"
+        ),
+        isEntryValid = true
+    )
 
     IvoryPianoTheme {
-        SessionEntryBody(
+        SessionEntryScreenContent(
             sessionUiState = uiState,
-            onSessionValueChange = { uiState = uiState.copy(sessionDetails = it) },
-            onStartTimer = { uiState = uiState.copy(isTimerRunning = true) },
-            onPauseTimer = { uiState = uiState.copy(isTimerRunning = false) },
-            onResetTimer = { uiState = uiState.copy(timerMillis = 0, isTimerRunning = false) },
-            onSaveClick = {}
+            onSessionValueChange = { },
+            onStartTimer = { },
+            onPauseTimer = { },
+            onResetTimer = { },
+            onSaveClick = {},
+            canNavigateBack = true,
+            onNavigateUp = {}
         )
     }
 }

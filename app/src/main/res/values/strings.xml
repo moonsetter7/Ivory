@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Ivory</string>
     <string name="session_entry_title">New Practice Entry</string>
-    <string name="session_details_title">Composition Log</string>
+    <string name="session_details_title">Practice Entry</string>
+    <string name="session_edit_title">Edit Practice Entry</string>
     <string name="piece_name">Title of the Piece</string>
     <string name="composer">Composer</string>
     <string name="bpm">Tempo</string>
@@ -12,9 +13,10 @@
     <string name="date">Date</string>
     <string name="timestamp">Logged at</string>
     <string name="delete">Delete Entry</string>
+    <string name="edit">Edit Entry</string>
     <string name="save">Save to Diary</string>
     <string name="no_sessions">Your diary is empty. Start practicing to log your first piece.</string>
-    <string name="delete_question">Are you sure you want to remove this practice log from your diary?</string>
+    <string name="delete_question">Are you sure you want to remove this practice entry from your diary?</string>
     <string name="yes">Delete</string>
     <string name="no">Cancel</string>
     <string name="untitled_composition">Untitled Composition</string>
@@ -27,9 +29,9 @@
     <!-- Authentication Strings -->
     <string name="auth_welcome">Welcome to Ivory</string>
     <string name="login_title">Sign In</string>
-    <string name="login_description">Enter your details to continue your musical journey</string>
+    <string name="login_description">Enter your details to continue your musical progress</string>
     <string name="register_title">Join Ivory</string>
-    <string name="register_description">Create an account to start tracking your piano sessions</string>
+    <string name="register_description">Create an account to start recording your piano journey</string>
     <string name="username_label">Username</string>
     <string name="password_label">Password</string>
     <string name="email_label">Email Address</string>
@@ -40,10 +42,20 @@
     <string name="already_user_prompt">Already a user?</string>
     <string name="login_link">Sign in here</string>
 
-    <string name="invalid_username">Please choose a name for your artistic identity.</string>
-    <string name="invalid_email">A valid email address is required for your diary.</string>
+    <string name="invalid_username">Please choose a name.</string>
+    <string name="invalid_email">A valid email address is required.</string>
     <string name="invalid_password">Your password must be at least 6 characters long.</string>
     <string name="login_failed">The username or password you provided is incorrect.</string>
     <string name="username_taken">This username is already in use.</string>
     <string name="email_taken">This email is already in use.</string>
+
+    <!-- Profile Strings -->
+    <string name="profile_title">My Profile</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="statistics">Practice Statistics</string>
+    <string name="total_sessions">Total Sessions</string>
+    <string name="total_practice_time">Total Practice Time</string>
+    <string name="average_session_time">Average Session Time</string>
+    <string name="sign_out_question">Are you sure you want to sign out?</string>
+    <string name="sign_out_confirm">Confirm</string>
 </resources>
