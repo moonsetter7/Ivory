@@ -59,22 +59,22 @@ fun hashPassword(password: String): String {
 
 <table>
   <tr>
-    <td align="center"><img src="https://files.catbox.moe/ozuehy.png" width="200"/><br><sub>Login</sub></td>
-    <td align="center"><img src="https://files.catbox.moe/dlyl1w.png" width="200"/><br><sub>Register</sub></td>
+    <td align="center"><img src="https://files.catbox.moe/ozuehy.png" width="200"/><br><sub>Register</sub></td>
+    <td align="center"><img src="https://files.catbox.moe/dlyl1w.png" width="200"/><br><sub>Login</sub></td>
     <td align="center"><img src="https://files.catbox.moe/gjb9ao.png" width="200"/><br><sub>Home</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="https://files.catbox.moe/6u3r5w.png" width="200"/><br><sub>Timer</sub></td>
-    <td align="center"><img src="https://files.catbox.moe/5pogpb.png" width="200"/><br><sub>Edit</sub></td>
-    <td align="center"><img src="https://files.catbox.moe/mnhzfj.png" width="200"/><br><sub>History</sub></td>
+    <td align="center"><img src="https://files.catbox.moe/6u3r5w.png" width="200"/><br><sub>Aggregation by Composer</sub></td>
+    <td align="center"><img src="https://files.catbox.moe/5pogpb.png" width="200"/><br><sub>Search/sub></td>
+    <td align="center"><img src="https://files.catbox.moe/mnhzfj.png" width="200"/><br><sub>New Entry</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="https://files.catbox.moe/8jx9vu.png" width="200"/><br><sub>Search</sub></td>
-    <td align="center"><img src="https://files.catbox.moe/fc8gxo.png" width="200"/><br><sub>Profile</sub></td>
-    <td align="center"><img src="https://files.catbox.moe/7sw2bl.png" width="200"/><br><sub>Dark Mode</sub></td>
+    <td align="center"><img src="https://files.catbox.moe/8jx9vu.png" width="200"/><br><sub>Entry Details</sub></td>
+    <td align="center"><img src="https://files.catbox.moe/fc8gxo.png" width="200"/><br><sub>Edit Entry</sub></td>
+    <td align="center"><img src="https://files.catbox.moe/7sw2bl.png" width="200"/><br><sub>Profile</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="https://files.catbox.moe/2rzk5h.png" width="200"/><br><sub>Details</sub></td>
+    <td align="center"><img src="https://files.catbox.moe/2rzk5h.png" width="200"/><br><sub>Dark Mode</sub></td>
   </tr>
 </table>
 
