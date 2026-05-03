@@ -10,7 +10,7 @@ Ivory is a free piano practice session tracker app designed to help users record
 </div>
 
 <div align="left">
-
+  
 ## Features
 - Practice stopwatch for accurate session duration tracking
 - Detailed session logging including piece name, composer, tempo, and measures practiced
@@ -21,7 +21,7 @@ Ivory is a free piano practice session tracker app designed to help users record
 - Secure Login/Registration system implementing Jetpack Security ensuring user credentials are never stored in plain text
 - Dark mode support
 - Offline database integration using ROOM SQLite for CRUD operations on user profiles and practice sessions
-- Real-time UI synchronization through lifecycle-aware state collection
+- Real-time UI synchronization through lifecycle-aware state collection 
 
 
 
@@ -30,7 +30,7 @@ Ivory uses an MVVM Architecture heavily based on [Android Basics with Compose's 
 
 ### UI Layer (Jetpack Compose)
 
-- Screens like `SessionEditScreen.kt` hoist state to ViewModels. ViewModels in turn manage the UiState and UI logic, while Composable functions receive the state as arguments and communicate user events back through callbacks. This separates the visual representation from the business logic and state management.
+- Screens like `SessionEditScreen.kt` hoist state to ViewModels. ViewModels in turn manage the UiState and UI logic, while Composable functions receive the state as arguments and communicate user events back through callbacks. This separates the visual representation from the business logic and state management. 
 - `IvoryPianoNavHost` centralizes navigation, managing screen transitions.
 
 ### Data Layer (Room + Repository)
@@ -53,7 +53,9 @@ fun hashPassword(password: String): String {
 }
 ```
 
-## Screenshots
+<details>
+<summary><b>Screenshots</b></summary>
+<br>
 
 <table>
   <tr>
@@ -76,8 +78,10 @@ fun hashPassword(password: String): String {
   </tr>
 </table>
 
+</details>
+
 ## Implementation Reference Table
-### UI Layer
+### UI Layer 
 
 | Component | File Path | Function |
 | :--- | :--- | :--- |
@@ -87,7 +91,7 @@ fun hashPassword(password: String): String {
 | User Entry | `ui/user/UserEntryViewModel.kt` | registration + input validation (usernames, emails etc.) |
 | Login Logic | `ui/user/LoginViewModel.kt` | authentication, works with SecurityManager to verify credentials |
 
-### Data Layer
+### Data Layer 
 
 | Component | File Path| Function|
 | :--- | :--- | :--- |
