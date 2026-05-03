@@ -2,7 +2,6 @@ package com.example.ivorypiano.ui.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ivorypiano.data.PianoSession
 import com.example.ivorypiano.data.SessionsRepository
 import com.example.ivorypiano.data.User
 import com.example.ivorypiano.data.UserSessionRepository

@@ -41,8 +41,13 @@ class LoginViewModel(
      */
     suspend fun login(): Boolean {
         val users = usersRepository.getAllUsersStream().firstOrNull()
-        val user = users?.find { it.username.equals(loginUiState.loginDetails.username, ignoreCase = true) }
-        
+        val user = users?.find {
+            it.username.equals(
+                loginUiState.loginDetails.username,
+                ignoreCase = true
+            )
+        }
+
         val isSuccess = if (user != null) {
             val hashedInput = securityManager.hashPassword(loginUiState.loginDetails.password)
             if (user.passwordHash == hashedInput) {
@@ -59,7 +64,7 @@ class LoginViewModel(
         if (!isSuccess) {
             loginUiState = loginUiState.copy(isLoginError = true)
         }
-        
+
         return isSuccess
     }
 }

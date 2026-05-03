@@ -20,7 +20,8 @@ class SessionDetailsViewModel(
     private val userSessionRepository: UserSessionRepository,
 ) : ViewModel() {
 
-    private val sessionId: Int = checkNotNull(savedStateHandle[SessionDetailsDestination.sessionIdArg])
+    private val sessionId: Int =
+        checkNotNull(savedStateHandle[SessionDetailsDestination.sessionIdArg])
 
     val uiState: StateFlow<SessionUiState> =
         sessionsRepository.getSessionStream(sessionId)

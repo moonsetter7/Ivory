@@ -9,9 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ivorypiano.IvoryPianoTopAppBar
-import com.example.ivorypiano.R
 import com.example.ivorypiano.ui.AppViewModelProvider
-import com.example.ivorypiano.ui.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

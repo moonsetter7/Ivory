@@ -16,7 +16,7 @@ interface AppContainer {
  * AppContainer implementation that provides instances of repositories
  */
 class AppDataContainer(private val context: Context) : AppContainer {
-    
+
     override val sessionsRepository: SessionsRepository by lazy {
         OfflineSessionsRepository(SessionDatabase.getDatabase(context).sessionDao())
     }

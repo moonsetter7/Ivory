@@ -63,9 +63,9 @@ class UserEntryViewModel(
 
             val hashedPassword = securityManager.hashPassword(details.password)
             val userToSave = details.toUser(hashedPassword)
-            
+
             usersRepository.insertUser(userToSave)
-            
+
             // Retrieve the saved user to get the ID
             val savedUser = usersRepository.getUserByUsername(details.username)
             if (savedUser != null) {
@@ -77,9 +77,11 @@ class UserEntryViewModel(
 
     private fun validateInput(userDetails: UserDetails): ValidationResult {
         val usernameError = userDetails.username.isBlank()
-        val emailError = userDetails.email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(userDetails.email).matches()
+        val emailError =
+            userDetails.email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(userDetails.email)
+                .matches()
         val passwordError = userDetails.password.length < 6
-        
+
         return ValidationResult(
             usernameError = usernameError,
             emailError = emailError,

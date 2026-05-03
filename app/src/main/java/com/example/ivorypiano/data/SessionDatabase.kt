@@ -12,7 +12,7 @@ abstract class SessionDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     // singleton magic
-    companion object{
+    companion object {
         @Volatile // ensures this massive block of memory is never cached
         private var Instance: SessionDatabase? = null
 

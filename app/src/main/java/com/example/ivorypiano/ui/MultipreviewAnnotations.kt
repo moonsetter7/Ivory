@@ -8,9 +8,28 @@ import androidx.compose.ui.tooling.preview.Preview
  */
 
 @Preview(name = "Compact - Light", device = "spec:width=411dp,height=891dp", showBackground = true)
-@Preview(name = "Compact - Dark", device = "spec:width=411dp,height=891dp", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(
+    name = "Compact - Dark",
+    device = "spec:width=411dp,height=891dp",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
 @Preview(name = "Medium - Light", device = "spec:width=673dp,height=841dp", showBackground = true)
-@Preview(name = "Medium - Dark", device = "spec:width=673dp,height=841dp", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Preview(name = "Expanded - Light", device = "spec:width=1280dp,height=800dp", showBackground = true)
-@Preview(name = "Expanded - Dark", device = "spec:width=1280dp,height=800dp", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(
+    name = "Medium - Dark",
+    device = "spec:width=673dp,height=841dp",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
+@Preview(
+    name = "Expanded - Light",
+    device = "spec:width=1280dp,height=800dp",
+    showBackground = true
+)
+@Preview(
+    name = "Expanded - Dark",
+    device = "spec:width=1280dp,height=800dp",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
 annotation class DevicePreviews

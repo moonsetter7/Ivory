@@ -1,6 +1,15 @@
 package com.example.ivorypiano.ui.user
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AvTimer
@@ -8,8 +17,22 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Timeline
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -96,7 +119,7 @@ fun ProfileBody(
         verticalArrangement = Arrangement.Top
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        
+
         Text(
             text = "Personal Information",
             style = MaterialTheme.typography.labelLarge,
@@ -109,18 +132,18 @@ fun ProfileBody(
             value = uiState.user?.username ?: "",
             icon = Icons.Default.Person
         )
-        
+
         HorizontalDivider(
             thickness = 0.5.dp,
             color = MaterialTheme.colorScheme.outlineVariant
         )
-        
+
         ProfileInfoItem(
             label = stringResource(R.string.email_label),
             value = uiState.user?.email ?: "",
             icon = Icons.Default.Email
         )
-        
+
         HorizontalDivider(
             thickness = 0.5.dp,
             color = MaterialTheme.colorScheme.outlineVariant
@@ -235,7 +258,10 @@ private fun SignOutConfirmationDialog(
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text(text = stringResource(R.string.sign_out_confirm), color = MaterialTheme.colorScheme.error)
+                Text(
+                    text = stringResource(R.string.sign_out_confirm),
+                    color = MaterialTheme.colorScheme.error
+                )
             }
         }
     )
@@ -281,7 +307,11 @@ fun ProfileScreenPreview() {
             ) { innerPadding ->
                 ProfileBody(
                     uiState = ProfileUiState(
-                        user = User(username = "rachmaninoff", email = "concerto@secondmovement.com", passwordHash = ""),
+                        user = User(
+                            username = "rachmaninoff",
+                            email = "concerto@secondmovement.com",
+                            passwordHash = ""
+                        ),
                         totalSessions = totalSessions,
                         totalDurationMillis = totalDuration,
                         averageDurationMillis = avgDuration

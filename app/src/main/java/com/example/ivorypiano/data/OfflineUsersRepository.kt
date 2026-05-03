@@ -7,7 +7,8 @@ class OfflineUsersRepository(private val userDao: UserDao) : UsersRepository {
 
     override fun getUserStream(id: Int): Flow<User?> = userDao.getUser(id)
 
-    override suspend fun getUserByUsername(username: String): User? = userDao.getUserByUsername(username)
+    override suspend fun getUserByUsername(username: String): User? =
+        userDao.getUserByUsername(username)
 
     override suspend fun getUserByEmail(email: String): User? = userDao.getUserByEmail(email)
 

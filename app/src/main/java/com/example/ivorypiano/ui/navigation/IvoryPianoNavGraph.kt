@@ -7,8 +7,20 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.ivorypiano.ui.session.*
-import com.example.ivorypiano.ui.user.*
+import com.example.ivorypiano.ui.session.HomeDestination
+import com.example.ivorypiano.ui.session.HomeScreen
+import com.example.ivorypiano.ui.session.SessionDetailsDestination
+import com.example.ivorypiano.ui.session.SessionDetailsScreen
+import com.example.ivorypiano.ui.session.SessionEditDestination
+import com.example.ivorypiano.ui.session.SessionEditScreen
+import com.example.ivorypiano.ui.session.SessionEntryDestination
+import com.example.ivorypiano.ui.session.SessionEntryScreen
+import com.example.ivorypiano.ui.user.LoginDestination
+import com.example.ivorypiano.ui.user.LoginScreen
+import com.example.ivorypiano.ui.user.ProfileDestination
+import com.example.ivorypiano.ui.user.ProfileScreen
+import com.example.ivorypiano.ui.user.UserEntryDestination
+import com.example.ivorypiano.ui.user.UserEntryScreen
 
 /**
  * Provides Navigation graph for the application.
