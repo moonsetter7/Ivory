@@ -65,7 +65,7 @@ fun hashPassword(password: String): String {
   </tr>
   <tr>
     <td align="center"><img src="https://files.catbox.moe/6u3r5w.png" width="200"/><br><sub>Aggregation by Composer</sub></td>
-    <td align="center"><img src="https://files.catbox.moe/5pogpb.png" width="200"/><br><sub>Search/sub></td>
+    <td align="center"><img src="https://files.catbox.moe/5pogpb.png" width="200"/><br><sub>Search</sub></td>
     <td align="center"><img src="https://files.catbox.moe/mnhzfj.png" width="200"/><br><sub>New Entry</sub></td>
   </tr>
   <tr>
