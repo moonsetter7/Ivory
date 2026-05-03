@@ -53,8 +53,15 @@ fun hashPassword(password: String): String {
 }
 ```
 
+## Demo
+
+<video src="https://files.catbox.moe/sc19xg.mp4" controls="controls" style="max-width: 600px;">
+</video>
+
 <details>
+
 <summary><b>Screenshots</b></summary>
+
 <br>
 
 <table>
@@ -79,6 +86,7 @@ fun hashPassword(password: String): String {
 </table>
 
 </details>
+
 
 ## Implementation Reference Table
 ### UI Layer 
