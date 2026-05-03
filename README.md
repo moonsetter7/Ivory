@@ -55,8 +55,14 @@ fun hashPassword(password: String): String {
 
 ## Demo
 
-<video src="https://files.catbox.moe/sc19xg.mp4" controls="controls" style="max-width: 600px;">
-</video>
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=ntvOG9OxXiU" target="_blank">
+    <img src="https://files.catbox.moe/49u013.png" alt="Demonstration Video" width="600" />
+  </a>
+  <p><b>Note:</b> Click the thumbnail above to view the demonstration video in a new tab.</p>
+</div>
+
+
 
 <details>
 
